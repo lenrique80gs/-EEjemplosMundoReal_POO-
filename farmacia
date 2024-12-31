@@ -1,0 +1,97 @@
+# farmacia.py
+
+# Clase Producto
+class Producto:
+    def __init__(self, nombre, precio, stock):
+        self.nombre = nombre
+        self.precio = precio
+        self.stock = stock
+
+    def actualizar_stock(self, cantidad):
+        """Actualiza el stock de un producto, restando o sumando unidades."""
+        if cantidad >= 0:
+            self.stock += cantidad
+            print(f"Stock actualizado. Stock actual de {self.nombre}: {self.stock}")
+        else:
+            if self.stock + cantidad >= 0:
+                self.stock += cantidad
+                print(f"Stock actualizado. Stock actual de {self.nombre}: {self.stock}")
+            else:
+                print(f"No hay suficiente stock de {self.nombre} para esa cantidad.")
+
+    def __str__(self):
+        return f"{self.nombre} - Precio: {self.precio}€ - Stock: {self.stock}"
+
+# Clase Cliente
+class Cliente:
+    def __init__(self, nombre, dni):
+        self.nombre = nombre
+        self.dni = dni
+        self.carrito = []
+
+    def agregar_al_carrito(self, producto, cantidad):
+        """Añade productos al carrito si hay suficiente stock."""
+        if producto.stock >= cantidad:
+            self.carrito.append((producto, cantidad))
+            producto.actualizar_stock(-cantidad)
+            print(f"{cantidad} unidades de {producto.nombre} añadidas al carrito de {self.nombre}.")
+        else:
+            print(f"No hay suficiente stock de {producto.nombre}.")
+
+    def mostrar_carrito(self):
+        """Muestra el contenido del carrito del cliente."""
+        if self.carrito:
+            print(f"Carrito de {self.nombre}:")
+            total = 0
+            for producto, cantidad in self.carrito:
+                print(f"{producto.nombre} - {cantidad} x {producto.precio}$")
+                total += producto.precio * cantidad
+            print(f"Total: {total}$")
+        else:
+            print(f"El carrito de {self.nombre} está vacío.")
+
+    def realizar_compra(self):
+        """Finaliza la compra y muestra el total."""
+        if self.carrito:
+            total = sum(producto.precio * cantidad for producto, cantidad in self.carrito)
+            print(f"{self.nombre} ha realizado la compra. Total a pagar: {total}$.")
+            self.carrito.clear()
+        else:
+            print(f"{self.nombre} no tiene productos en el carrito.")
+
+# Clase Venta
+class Venta:
+    def __init__(self, cliente, productos_comprados):
+        self.cliente = cliente
+        self.productos_comprados = productos_comprados
+        self.total = sum(producto.precio * cantidad for producto, cantidad in productos_comprados)
+
+    def mostrar_detalles_venta(self):
+        """Muestra los detalles de la venta realizada."""
+        print(f"Venta a {self.cliente.nombre}:")
+        for producto, cantidad in self.productos_comprados:
+            print(f"{producto.nombre} - {cantidad} x {producto.precio}$")
+        print(f"Total a pagar: {self.total}$")
+
+# Ejemplo de uso
+# Crear productos de farmacia
+producto1 = Producto("Paracetamol", 5, 200)
+producto2 = Producto("Ibuprofeno", 6, 150)
+producto3 = Producto("Vitamina C", 10, 80)
+
+# Crear cliente
+cliente1 = Cliente("Ana Gómez", "98765432B")
+
+# Cliente agrega productos al carrito
+cliente1.agregar_al_carrito(producto1, 3)
+cliente1.agregar_al_carrito(producto2, 2)
+
+# Mostrar carrito
+cliente1.mostrar_carrito()
+
+# Realizar compra
+cliente1.realizar_compra()
+
+# Crear y mostrar detalles de la venta
+venta1 = Venta(cliente1, cliente1.carrito)
+venta1.mostrar_detalles_venta()
