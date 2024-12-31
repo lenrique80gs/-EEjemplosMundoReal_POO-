@@ -1,0 +1,67 @@
+# distribuidora_telecomunicaciones.py
+
+# Clase Producto
+class Producto:
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
+
+    def __str__(self):
+        return f"{self.nombre} - ${self.precio}"
+
+# Clase Cliente
+class Cliente:
+    def __init__(self, nombre, dni):
+        self.nombre = nombre
+        self.dni = dni
+        self.carrito = []
+
+    def agregar_producto(self, producto, cantidad):
+        """Añadir productos al carrito."""
+        for _ in range(cantidad):
+            self.carrito.append(producto)
+        print(f"{cantidad} unidades de {producto.nombre} añadidas al carrito.")
+
+    def mostrar_carrito(self):
+        """Mostrar el carrito con los productos y el total."""
+        print(f"Carrito de {self.nombre}:")
+        total = 0
+        for producto in self.carrito:
+            print(f"{producto.nombre} - ${producto.precio}")
+            total += producto.precio
+        print(f"Total a pagar: ${total}")
+        return total
+
+    def realizar_pago(self, monto_efectivo, monto_transferencia):
+        """Realizar el pago, separando efectivo y transferencia."""
+        total = sum([producto.precio for producto in self.carrito])
+        if monto_efectivo + monto_transferencia == total:
+            print(f"Pago realizado: ${monto_efectivo} en efectivo y ${monto_transferencia} por transferencia.")
+        else:
+            print("El total del pago no coincide con el monto de la compra.")
+
+# Ejemplo de uso
+# Crear productos de la distribuidora
+manga_tipo_domo = Producto("Manga Tipo Domo", 50)
+manga_lineal = Producto("Manga Lineal", 38)
+caja_nap = Producto("Caja Nap", 45)
+cable_drop_aereo = Producto("Cable Drop Aéreo 2km", 90)
+cable_adss_12_hilos = Producto("Cable ADSS 12 hilos 5km", 540)
+
+# Crear cliente
+cliente1 = Cliente("Luis Jiménez", "98765432A")
+
+# Cliente agrega productos al carrito
+cliente1.agregar_producto(manga_tipo_domo, 1)  # 1 unidad de Manga Tipo Domo
+cliente1.agregar_producto(manga_lineal, 1)    # 1 unidad de Manga Lineal
+cliente1.agregar_producto(caja_nap, 1)        # 1 unidad de Caja Nap
+cliente1.agregar_producto(cable_drop_aereo, 1)# 1 unidad de Cable Drop Aéreo 2km
+cliente1.agregar_producto(cable_adss_12_hilos, 1)  # 1 unidad de Cable ADSS 12 hilos 5km
+
+# Mostrar el carrito
+total_a_pagar = cliente1.mostrar_carrito()
+
+# Cliente paga: $500 en efectivo y el resto por transferencia
+monto_efectivo = 500
+monto_transferencia = total_a_pagar - monto_efectivo
+cliente1.realizar_pago(monto_efectivo, monto_transferencia)
