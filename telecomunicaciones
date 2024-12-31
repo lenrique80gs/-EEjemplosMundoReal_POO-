@@ -1,0 +1,97 @@
+# telecomunicaciones.py
+
+# Clase Plan
+class Plan:
+    def __init__(self, nombre, precio, minutos_incluidos, datos_incluidos):
+        self.nombre = nombre
+        self.precio = precio
+        self.minutos_incluidos = minutos_incluidos
+        self.datos_incluidos = datos_incluidos
+
+    def __str__(self):
+        return f"Plan: {self.nombre} - Precio: {self.precio}$ - {self.minutos_incluidos} minutos, {self.datos_incluidos} GB de datos"
+
+# Clase Cliente
+class Cliente:
+    def __init__(self, nombre, dni):
+        self.nombre = nombre
+        self.dni = dni
+        self.plan = None
+
+    def contratar_plan(self, plan):
+        """El cliente contrata un plan de telecomunicaciones."""
+        self.plan = plan
+        print(f"{self.nombre} ha contratado el plan {plan.nombre}.")
+
+    def mostrar_plan(self):
+        """Muestra el plan actual del cliente."""
+        if self.plan:
+            print(f"Cliente: {self.nombre} - Plan contratado: {self.plan.nombre}")
+        else:
+            print(f"{self.nombre} no tiene un plan contratado.")
+
+# Clase Factura
+class Factura:
+    def __init__(self, cliente, periodo):
+        self.cliente = cliente
+        self.periodo = periodo
+        self.total = 0
+        if cliente.plan:
+            self.total = cliente.plan.precio
+
+    def mostrar_factura(self):
+        """Muestra los detalles de la factura."""
+        if self.cliente.plan:
+            print(f"Factura para {self.cliente.nombre} (DNI: {self.cliente.dni}) - Periodo: {self.periodo}")
+            print(f"Plan: {self.cliente.plan.nombre}")
+            print(f"Total a pagar: {self.total}$")
+        else:
+            print(f"{self.cliente.nombre} no tiene un plan contratado, no se puede generar factura.")
+
+# Clase Suscripcion
+class Suscripcion:
+    def __init__(self, cliente, plan, estado="activo"):
+        self.cliente = cliente
+        self.plan = plan
+        self.estado = estado
+
+    def cancelar_suscripcion(self):
+        """Cancela la suscripción del cliente."""
+        self.estado = "cancelado"
+        print(f"La suscripción de {self.cliente.nombre} al plan {self.plan.nombre} ha sido cancelada.")
+
+    def activar_suscripcion(self):
+        """Activa la suscripción del cliente."""
+        self.estado = "activo"
+        print(f"La suscripción de {self.cliente.nombre} al plan {self.plan.nombre} ha sido activada.")
+
+    def mostrar_suscripcion(self):
+        """Muestra el estado de la suscripción del cliente."""
+        print(f"Suscripción de {self.cliente.nombre}: Plan - {self.plan.nombre}, Estado: {self.estado}")
+
+
+# Ejemplo de uso
+# Crear planes de telecomunicaciones
+plan_basico = Plan("Plan Básico", 20, 100, 5)   # 100 minutos, 5 GB
+plan_avanzado = Plan("Plan Avanzado", 40, 300, 20)  # 300 minutos, 20 GB
+
+# Crear cliente
+cliente1 = Cliente("Marcos Merchan", "12345678A")
+
+# El cliente contrata un plan
+cliente1.contratar_plan(plan_basico)
+
+# Mostrar plan contratado
+cliente1.mostrar_plan()
+
+# Generar factura
+factura1 = Factura(cliente1, "Diciembre 2024")
+factura1.mostrar_factura()
+
+# Crear y mostrar suscripción
+suscripcion1 = Suscripcion(cliente1, plan_basico)
+suscripcion1.mostrar_suscripcion()
+
+# Cancelar suscripción
+suscripcion1.cancelar_suscripcion()
+suscripcion1.mostrar_suscripcion()
